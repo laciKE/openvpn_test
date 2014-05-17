@@ -89,12 +89,12 @@ for COMP in yes no; do
                 client)
                     echo "Sending ${RANDOM_FILE}..."
                     send_file $RANDOM_FILE > \
-                            $RESULT_DIR/$DIGEST-$CIPHER-$COMP-random-client
+                            $RESULT_DIR/${DIGEST}_${CIPHER}_${COMP}_random_client
                     echo "Receiving ${RANDOM_FILE}..."
                     receive_file
                     echo "Sending ${ZERO_FILE}..."
                     send_file $ZERO_FILE > \
-                            $RESULT_DIR/$DIGEST-$CIPHER-$COMP-zero-client
+                            $RESULT_DIR/${DIGEST}_${CIPHER}_${COMP}_zero_client
                     echo "Receiving ${ZERO_FILE}..."
                     receive_file
                     ;;
@@ -103,12 +103,12 @@ for COMP in yes no; do
                     receive_file
                     echo "Sending ${RANDOM_FILE}..."
                     send_file $RANDOM_FILE > \
-                            $RESULT_DIR/$DIGEST-$CIPHER-$COMP-random-server
+                            $RESULT_DIR/${DIGEST}_${CIPHER}_${COMP}_random_server
                     echo "Receiving ${ZERO_FILE}..."
                     receive_file
                     echo "Sending ${ZERO_FILE}..."
                     send_file $ZERO_FILE > \
-                            $RESULT_DIR/$DIGEST-$CIPHER-$COMP-zero-server
+                            $RESULT_DIR/${DIGEST}_${CIPHER}_${COMP}_zero_server
                     ;;
             esac
         done

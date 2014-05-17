@@ -1,6 +1,6 @@
 #!/bin/bash
 
-source config.sh
+source config.sh $1
 
 #remove ramdisk 
 if [ -d $RAMDISK ]; then

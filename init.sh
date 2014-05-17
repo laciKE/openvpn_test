@@ -2,10 +2,17 @@
 
 source config.sh $1
 
+#create testing directory
+if [ ! -d $TEST_DIR ]; then
+	echo "Creating openvpn testing directory $TEST_DIR"
+	mkdir -p $TEST_DIR
+	mkdir -p $RESULT_DIR
+fi
+
 #create ramdisk 
 if [ ! -d $RAMDISK ]; then
 	echo "Creating ramdisk at $RAMDISK with size $RAMDISK_SIZE"
-	mkdir $RAMDISK
+	mkdir -p $RAMDISK
 	mount -t tmpfs -o size=$RAMDISK_SIZE tmpfs $RAMDISK 
 fi
 
@@ -32,12 +39,6 @@ esac
 if [ ! -f $ZERO_FILE ]; then
 	echo "Generating $ZERO_FILE with size $SIZE MB"
 	dd if=/dev/zero bs=`expr 1024 \* 1024` count=$SIZE | pv > $ZERO_FILE
-fi
-
-#create testing directory
-if [ ! -d $TEST_DIR ]; then
-	echo "Creating openvpn testing directory $TEST_DIR"
-	mkdir $TEST_DIR
 fi
 
 #backup content of testing directory
@@ -88,6 +89,6 @@ esac
 echo "OK"
 
 echo "Create uniq list of ciphers and digests"
-sort $TEST_DIR/ciphers.* | uniq -d > $CIPHERS
-sort $TEST_DIR/digests.* | uniq -d > $DIGESTS
+sort $TEST_DIR/ciphers.* | uniq -d | awk '{print $1}' > $CIPHERS
+sort $TEST_DIR/digests.* | uniq -d | awk '{print $1}' > $DIGESTS
 rm $TEST_DIR/ciphers.* $TEST_DIR/digests.*

@@ -42,6 +42,8 @@ auth $DIGEST
 cipher $CIPHER
 comp-lzo $COMP
 EOF
+            # Give the server a while to initialize and start listening.
+            sleep 5
             ;;
         server)
             cat > $CONFIG <<EOF
@@ -56,7 +58,7 @@ EOF
     esac
 
     [ -s $PIDFILE ] && kill -HUP $(cat $PIDFILE) || \
-        openvpn --log-append $LOGFILE --config $CONFIG \
+        openvpn --log-append $LOGFILE --verb 3 --config $CONFIG \
                 --daemon --writepid $PIDFILE
 }
 

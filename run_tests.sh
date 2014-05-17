@@ -56,8 +56,8 @@ EOF
     esac
 
     [ -s $PIDFILE ] && kill -HUP $(cat $PIDFILE) || \
-        openvpn --config $CONFIG --daemon --pidfile $PIDFILE \
-                --log-append $LOGFILE
+        openvpn --log-append $LOGFILE --config $CONFIG \
+                --daemon --writepid $PIDFILE
 }
 
 function kill_vpn()

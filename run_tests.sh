@@ -76,7 +76,7 @@ function send_file()
 {
     sleep 2 # to make sure the listener is ready
     BEFORE=$(get_time)
-    nc -q 0 $(get_peer_ip) $NC_PORT < $1
+    nc $(get_peer_ip) $NC_PORT < $1
     AFTER=$(get_time)
     echo "$AFTER - $BEFORE" | bc -l
 }

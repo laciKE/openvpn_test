@@ -89,6 +89,6 @@ esac
 echo "OK"
 
 echo "Create uniq list of ciphers and digests"
-sort $TEST_DIR/ciphers.* | uniq -d | awk '{print $1}' > $CIPHERS
+sort $TEST_DIR/ciphers.* | uniq -d | awk '{print $1}' | grep 'CBC$' > $CIPHERS
 sort $TEST_DIR/digests.* | uniq -d | awk '{print $1}' > $DIGESTS
 rm $TEST_DIR/ciphers.* $TEST_DIR/digests.*

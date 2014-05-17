@@ -80,7 +80,7 @@ function send_file()
 }
 
 
-for COMP in yes no; do
+for COMP in no yes; do
     for DIGEST in $(cat $DIGESTS); do
         for CIPHER in $(cat $CIPHERS); do
             echo "Digest: $DIGEST, cipher: $CIPHER, compression $COMP"

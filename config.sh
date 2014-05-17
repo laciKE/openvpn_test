@@ -10,7 +10,7 @@ NC_PORT=4247
 
 TEST_DIR=/tmp/openvpn_test #directory for testing specific files, e.g. openvpn config, static key, results,...
 RAMDISK=$TEST_DIR/ramdisk 
-SIZE=32 #320 for real test
+SIZE=320 #320 for real test
 RAMDISK_SIZE=`expr 2 \* $SIZE + 16`m # 16MB reserve
 RANDOM_FILE=$RAMDISK/random_file
 ZERO_FILE=$RAMDISK/zero_file

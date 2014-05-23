@@ -1,0 +1,174 @@
+\documentclass{beamer}
+\usepackage[utf8]{inputenc}
+\usepackage{slovak}
+\usepackage{graphicx}
+\usepackage{ragged2e}
+\usepackage{verbatim}
+\usetheme{Warsaw}
+
+\title{Experimentálne porovnanie výkonu OpenVPN pri~použití rôznych kryptografických algoritmov}
+\author[Petrucha, Bačo]{Michal Petrucha, Ladislav Bačo\\{\tiny RNDr. Jaroslav Janáček, PhD.}}
+\institute{
+Fakulta matematiky, fyziky a informatiky\\
+Univerzita Komenského, Bratislava
+}
+\subject{Informatika}
+\date{26. mája 2014}
+
+\begin{document}
+
+\frame{\titlepage}
+
+\begin{frame}
+	\frametitle{Zadanie projektu}
+	\begin{block}{Úloha}
+	\justifying
+	Cieľom projektu je experimentálne zistiť vplyv použitého kryptografického algoritmu na maximálnu prenosovú rýchlosť dosiahnuteľnú medzi dvomi počítačmi pri nasadení OpenVPN, resp. vplyv na vyťaženia procesora v prípade, že dosiahnutá maximálna prenosová rýchlosť bude limitovaná inými faktormi. Na riešenie projektu je možné využiť sieťové laboratórium KI.
+	\end{block}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{OpenVPN}
+	\framesubtitle{Konfigurácia a sprevádzkovanie}
+	\begin{itemize}
+		\item statický kľúč vs. certifikáty, privátne a verejné kľuče
+			\begin{itemize}
+				\item výhody: jednoduchšie nastavenie, žiadne PKI
+			\end{itemize}
+		\item minimálna konfigurácia:
+			\begin{columns}
+				\tiny
+				\column[t]{0.4\textwidth}
+					\begin{block}{server}
+\begin{verbatim}
+dev tun
+ifconfig $SERVER_VPN_IP $CLIENT_VPN_IP
+secret $STATIC_KEY
+\end{verbatim}
+					\end{block}
+				\column[t]{0.4\textwidth}
+					\begin{block}{client}
+\begin{verbatim}
+dev tun
+remote $SERVER_IP
+ifconfig $CLIENT_VPN_IP $SERVER_VPN_IP
+secret $STATIC_KEY
+\end{verbatim}
+					\end{block}
+			\end{columns}
+
+		\item ďalšie parametre:
+			\begin{itemize}
+				\item HMAC autentifikácia paketov: \texttt{auth SHA512}
+				\item šifrovací algoritmus: \texttt{cipher AES-256-CBC}
+				\item veľkosť kľúča: \texttt{keysize n}
+				\item kompresia: \texttt{comp-lzo yes|no}
+			\end{itemize}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{OpenVPN}
+	\framesubtitle{Testujeme\dots}
+	\begin{itemize}
+		\item \texttt{nc, pv}
+		\item gigabit ethernet, bez OpenVPN
+			\begin{itemize}
+				\item \texttt{/dev/zero} $\approx$ 80 MBps
+				\item \texttt{/dev/urandom} $\approx$ 5 MBps ??
+				\item \texttt{video.mp4} $\approx$ 50 MBps
+				\item bottleneck: HDD $\rightarrow$ ramdisk
+			\end{itemize}
+		\bigskip
+		\item s OpenVPN:
+			\begin{itemize}
+				\item 40 šifrovacích algoritmov
+				\item 24 hašovacích funkcií
+				\item kompresia
+				\item aspoň dva druhy súborov (nulový, náhodný)
+				\item obojsmerné posielanie
+				\item $40 \cdot 24 \cdot 2 \cdot 2 \cdot 2 = 7680$ testov!!
+			\end{itemize}
+		\item to určite nechceme robiť ručne\dots
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Testovací skript}
+	\framesubtitle{Inicializácia}
+	\begin{itemize}
+		\item ramdisk, adresáre pre test
+		\item náhodný súbor z \texttt{dev/urandom}, odoslanie klientovi\\
+			 nulový súbor z \texttt{/dev/zero}
+		\item generovanie kľúča, odoslanie klientovi
+		\item vytvorenie, sychnronizácia a spoločná podmnožina použiteľných šifier a hašov\\
+			\bigskip
+			{\small
+			\texttt{openvpn --show-ciphers}, \texttt{openvpn --show-digests}\\
+			\texttt{sort \$TEST\_DIR/ciphers.* | uniq -d | awk '\{print \$1\}' > \$CIPHERS}}
+	\end{itemize}
+\end{frame}
+
+\begin{frame}[fragile]
+	\frametitle{Testovací skript}
+	\framesubtitle{Testovanie OpenVPN}
+	\begin{itemize}
+		\item TODO Testovacie prostredie:
+			\begin{itemize}
+				\item Debian GNU/Linux 7.5 (wheezy), HW?
+				\item openvpn --version
+				\item echo "version" | openssl
+			\end{itemize}
+		\item
+{\small
+\begin{verbatim}
+for COMP in no yes; do
+    for DIGEST in $(cat $DIGESTS); do
+        for CIPHER in $(cat $CIPHERS); do
+\end{verbatim}
+}
+		\item vygenerovanie konfiguračných súborov, štart OpenVPN
+		\item posielanie súborov z klienta na server a zo servera na klienta
+{\tiny
+\begin{verbatim}
+BEFORE=$(get_time)
+nc $(get_peer_ip) $NC_PORT < $1
+AFTER=$(get_time)
+echo "$AFTER - $BEFORE" | bc -l
+\end{verbatim}
+}
+			\begin{itemize} 
+				\item fungujú iba CBC šifry!
+				\item neukončovanie \texttt{nc} listenera $\rightarrow$ sleep
+			\end{itemize}	
+
+	\end{itemize}
+\end{frame}
+
+\begin{frame}
+	\frametitle{Výsledky}
+	\begin{itemize}
+		\item čas behu: ?? dní, prenesených 1000 GB v 3200 testoch
+		\item 
+	\end{itemize}
+\end{frame}
+
+
+\begin{frame}
+	\frametitle{Záver}
+	\begin{itemize}
+		\item TODO
+	\end{itemize}
+
+	\bigskip
+	Odkazy:
+	\small
+	\begin{itemize}
+		\item \href{https://github.com/laciKE/openvpn\_test/}{https://github.com/laciKE/openvpn\_test/}
+		\item \href{https://openvpn.net/index.php/open-source/documentation/miscellaneous/78-static-key-mini-howto.html}{https://openvpn.net/index.php/open-source/documentation/miscellaneous/78-static-key-mini-howto.html}
+	\end{itemize}
+\end{frame}
+
+
+
+\end{document}

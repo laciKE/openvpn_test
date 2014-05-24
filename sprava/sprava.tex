@@ -1,0 +1,113 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[slovak]{babel}
+\usepackage[utf8]{inputenc}
+\usepackage{listings}
+\usepackage{graphicx}
+\usepackage{tabularx}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{hyperref}
+\usepackage{multicol}
+
+\usepackage{epstopdf}
+\linespread{1.5}
+
+\lstset{
+language=python
+,breaklines=true
+,basicstyle=\ttfamily
+, showstringspaces=false}
+
+\textwidth 6.5in
+\oddsidemargin 0.0in
+\evensidemargin 0.0in
+
+\begin{document}
+
+\thispagestyle{empty}
+\begin{center}
+    \large{
+        \textbf{
+            Fakulta matematiky, fyziky a informatiky\\
+            Univerzita Komenského, Bratislava
+        }
+    }
+\end{center}
+
+\vspace{2cm}
+
+\begin{figure}[!h]
+    \centering
+    \includegraphics[width=3.5cm]{komlogo-new.pdf}
+\end{figure}
+
+\vspace{1cm}
+
+\begin{center}
+    \large{
+        \textbf{
+            Experimentálne porovnanie výkonu OpenVPN pri~použití rôznych kryptografických algoritmov
+        }\\
+
+        2-INF-262	Bezpečnosť IT infraštruktúry \\
+        (Seminárna práca)\\
+        \url{https://github.com/laciKE/openvpn\_test/}
+
+        \vspace{1.5cm}
+
+        \textbf{
+            Ladislav Bačo, Michal Petrucha
+        } \\
+        Vedúci práce: RNDr. Jaroslav Janáček, PhD.
+
+    }
+\end{center}
+
+\vfill
+
+\begin{multicols}{2}
+    \begin{flushleft}
+        \textbf{\today}
+    \end{flushleft}
+    \begin{flushright}
+        \textbf{Bratislava}
+    \end{flushright}
+\end{multicols}
+
+\newpage
+
+\section{Úvod}
+
+OpenVPN je populárny multiplatformový nástroj na vytváranie virtuálnych
+privátnych sietí.
+TODO: omáčka a~formulácia zadania
+
+\section{Spôsob merania}
+TODO: lepší názov pre sekciu
+
+\subsection{Nastavenia OpenVPN}
+
+\subsection{Nástroje a~dáta}
+
+\subsection{Použité prostredie}
+
+\subsection{Postretnutú komplikácie}
+
+\section{Výsledky}
+
+\subsection{Vplyv kompresie}
+
+\subsection{Porovnanie šifrovacích algoritmov}
+
+\subsection{Porovnanie hašovacích algoritmov}
+
+\section{Záver}
+
+%\renewcommand{\refname}{Literatúra}
+%\phantomsection
+%\addcontentsline{toc}{section}{Literatúra}
+%\begin{thebibliography}{99}
+%  \bibitem{proj} \url{https://github.com/laciKE/openvpn_test} - Repozitár projektu.
+%\end{thebibliography}
+\end{document}

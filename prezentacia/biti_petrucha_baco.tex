@@ -148,79 +148,205 @@ echo "$AFTER - $BEFORE" | bc -l
 \begin{frame}
 	\frametitle{Výsledky}
 	\begin{itemize}
-		\item 30 hodín, 1000 GB v 3200 testoch, 16 šifier, 25 hašov
-		\item 
+		\item 16 šifier
+		\item 25 hašov
+		\item 3200 testov
+		\item 1000 GB
+		\item 30 hodín
+		\item spracovanie meraní pomocou Pythonu a SQLite
 	\end{itemize}
+	\begin{table}
+		\begin{tabular}{|l||l|l|l|l|l|}
+			\hline
+			\bf súbor & \bf  avg & \bf stdev & \bf median & \bf min & \bf max \\ \hline 
+			random & 1.0027 & 0.002 & 1.0027 & 0.9796 & 1.0075 \\ \hline
+			zero & 0.6614 & 0.0943 & 0.6627 & 0.5164 & 0.84\\ \hline
+		\end{tabular}
+		\caption{Vplyv kompresie na čas prenosu; čas prenosu bez kompresie: 1}
+	\end{table}
 \end{frame}
 
-%%vplyv kompresie
-%SELECT data_file, AVG(delta), STDEV(delta), VARIANCE(DELTA), MEDIAN(delta), MIN(delta), MAX(delta) FROM compress GROUP BY data_file;
-%random      -0.0857597789275  0.0557317434867798  0.00310602723207622  -0.0883523774999979  -0.215949200999997  0.541194006999998
-%zero        11.554204475125   4.99662293268868    24.9662407314705     10.9717710805        3.76734136          23.066444771 
+\begin{frame}
+	\frametitle{Výsledky}
+	\begin{table}
+		\footnotesize 
+		\begin{tabular}{|l||l|l|l|l|l|}
+			\hline
+			\bf šifra & \bf  avg & \bf stdev & \bf median & \bf min & \bf max \\ \hline 
+BF-CBC & 1.0 & 0.0 & 1.0 & 1.0 & 1.0\\ \hline
+CAMELLIA-128-CBC & 1.0148 & 0.0036 & 1.014 & 1.0096 & 1.0236 \\ \hline
+CAMELLIA-256-CBC & 1.0573 & 0.0044 & 1.0583 & 1.0456 & 1.0655 \\ \hline
+CAMELLIA-192-CBC & 1.058 & 0.0046 & 1.0599 & 1.0467 & 1.0663 \\ \hline
+CAST5-CBC & 1.0781 & 0.0078 & 1.0799 & 1.0603 & 1.0894 \\ \hline
+DES-CBC & 1.1026 & 0.0119 & 1.1034 & 1.0776 & 1.1402 \\ \hline
+SEED-CBC & 1.1045 & 0.0068 & 1.1058 & 1.0852 & 1.1147 \\ \hline
+DESX-CBC & 1.1134 & 0.0109 & 1.1159 & 1.0887 & 1.1321 \\ \hline
+AES-128-CBC & 1.2823 & 0.0221 & 1.2867 & 1.2235 & 1.3078 \\ \hline
+AES-192-CBC & 1.3687 & 0.0293 & 1.376 & 1.2925 & 1.4016 \\ \hline
+RC2-64-CBC & 1.4211 & 0.0364 & 1.4294 & 1.3309 & 1.4679 \\ \hline
+RC2-40-CBC & 1.4213 & 0.0368 & 1.4306 & 1.3314 & 1.4694 \\ \hline
+RC2-CBC & 1.4213 & 0.0365 & 1.4315 & 1.3318 & 1.4687 \\ \hline
+AES-256-CBC & 1.4553 & 0.0376 & 1.4671 & 1.3593 & 1.498 \\ \hline
+DES-EDE-CBC & 1.5821 & 0.0508 & 1.5934 & 1.4585 & 1.6539 \\ \hline
+DES-EDE3-CBC & 1.5824 & 0.0504 & 1.592 & 1.4599 & 1.6551 \\ \hline
+		\end{tabular}
+		\caption{Vplyv šifrovacieho algoritmu na čas prenosu; čas prenosu pri použití BF-CBC: 1}
+	\end{table}
+\end{frame}
 
-%SELECT cipher, AVG(relative_duration), STDEV(relative_duration), VARIANCE(relative_duration), MEDIAN(relative_duration), MIN(relative_duration), MAX(relative_duration) FROM cipher_speedup GROUP BY cipher ORDER BY AVG(relative_duration);
-%BF-CBC            1.0               0.0                       0.0                          1.0                        1.0                     1.0                   
-%CAMELLIA-128-CBC  1.01476178369039  0.00364374485111957       1.32768765400603e-05         1.01395810879539           1.00964661427557        1.02363733553666      
-%CAMELLIA-256-CBC  1.0573029394681   0.0043632344410279        1.9037814787372e-05          1.05834444227818           1.04556098561211        1.06552086216308      
-%CAMELLIA-192-CBC  1.05796844248212  0.00462906832671026       2.14282735733522e-05         1.05989240695088           1.04669559306978        1.06630048531279      
-%CAST5-CBC         1.07811504801644  0.0077843212783913        6.05956577652155e-05         1.07992887391252           1.06028748784757        1.08937181702131      
-%DES-CBC           1.10261211442923  0.0119398948305613        0.000142561088564865         1.10335949482943           1.07762286807973        1.14024066496913      
-%SEED-CBC          1.10450326225978  0.00677681253881168       4.59251881861952e-05         1.10576551344001           1.08518623637541        1.11465838773836      
-%DESX-CBC          1.11335791502296  0.0108989849056335        0.000118787871973227         1.1159091920981            1.08874658438186        1.1320529410642       
-%AES-128-CBC       1.28233241253319  0.0220806589383273        0.000487555499150734         1.2866743639179            1.2235094381187         1.30777715232281      
-%AES-192-CBC       1.36873926219966  0.0293459298902086        0.000861183601121038         1.37599945693652           1.29245538836533        1.4015845174513       
-%RC2-64-CBC        1.42108089718595  0.0364302800203499        0.00132716530236111          1.42939542332138           1.33091606148008        1.46786125569933      
-%RC2-40-CBC        1.42130730725417  0.0367624673957523        0.00135147900902375          1.4305703085136            1.33135330226513        1.46939772716585      
-%RC2-CBC           1.42131968997308  0.0364705852311691        0.00133010358710397          1.43150114720563           1.33178894442947        1.46871905143929      
-%AES-256-CBC       1.45530872138825  0.0376307133001632        0.00141607058347908          1.46711703682334           1.35928582625475        1.49795160266696      
-%DES-EDE-CBC       1.58213061851406  0.0508029404427894        0.00258093875763361          1.59339505003429           1.45850195726551        1.65392878316002      
-%DES-EDE3-CBC      1.58243089865684  0.0503820932032601        0.00253835531554198          1.59203281742858           1.45988682600353        1.65514440290782 
+\begin{frame}
+	\frametitle{Výsledky}
+	\begin{table}
+		\tiny 
+		\begin{tabular}{|l||l|l|l|l|l|}
+			\hline
+			\bf haš & \bf  avg & \bf stdev & \bf median & \bf min & \bf max \\ \hline 
+MD4 & 1.0 & 0.0 & 1.0 & 1.0 & 1.0 \\ \hline
+RSA-MD4 & 1.0027 & 0.0066 & 1.0013 & 0.9985 & 1.0272 \\ \hline
+MD5 & 1.0082 & 0.0019 & 1.0084 & 1.0039 & 1.0111 \\ \hline
+RSA-MD5 & 1.0092 & 0.002 & 1.0092 & 1.005 & 1.0114 \\ \hline
+ecdsa-with-SHA1 & 1.0494 & 0.0098 & 1.0509 & 1.0312 & 1.0643 \\ \hline
+DSA-SHA1-old & 1.0498 & 0.0094 & 1.0512 & 1.0328 & 1.0631 \\ \hline
+SHA1 & 1.0502 & 0.0094 & 1.0507 & 1.032 & 1.0627 \\ \hline
+DSA-SHA & 1.0505 & 0.0099 & 1.0523 & 1.0328 & 1.0649 \\ \hline
+RSA-SHA1-2 & 1.0505 & 0.0095 & 1.0525 & 1.033 & 1.0656 \\ \hline
+RSA-SHA1 & 1.0506 & 0.0097 & 1.0524 & 1.0324 & 1.065 \\ \hline
+DSA-SHA1 & 1.0507 & 0.0102 & 1.051 & 1.0327 & 1.0654 \\ \hline
+DSA & 1.0509 & 0.0095 & 1.052 & 1.0336 & 1.0644 \\ \hline
+RIPEMD160 & 1.0741 & 0.014 & 1.0746 & 1.0492 & 1.0936 \\ \hline
+RSA-RIPEMD160 & 1.0746 & 0.0147 & 1.0761 & 1.0503 & 1.0949 \\ \hline
+RSA-SHA & 1.0846 & 0.0161 & 1.0873 & 1.0574 & 1.1073 \\ \hline
+SHA & 1.0857 & 0.0165 & 1.0863 & 1.0582 & 1.1101 \\ \hline
+RSA-SHA224 & 1.133 & 0.0246 & 1.1346 & 1.0907 & 1.1695 \\ \hline
+SHA224 & 1.1331 & 0.0241 & 1.1346 & 1.0911 & 1.1687 \\ \hline
+SHA256 & 1.1367 & 0.0254 & 1.1369 & 1.0942 & 1.1735 \\ \hline
+RSA-SHA256 & 1.1369 & 0.0253 & 1.1369 & 1.0944 & 1.174 \\ \hline
+RSA-SHA512 & 1.2056 & 0.0383 & 1.2098 & 1.1504 & 1.2561 \\ \hline
+SHA512 & 1.206 & 0.0379 & 1.2113 & 1.1506 & 1.2593 \\ \hline
+SHA384 & 1.2106 & 0.0397 & 1.2164 & 1.1521 & 1.2651 \\ \hline
+RSA-SHA384 & 1.2108 & 0.0396 & 1.2163 & 1.1525 & 1.2635 \\ \hline
+whirlpool & 1.327 & 0.0589 & 1.3344 & 1.2401 & 1.4065 \\ \hline
+		\end{tabular}
+		\caption{Vplyv hašovacej funkcie na čas prenosu; čas prenosu pri použití MD4: 1}
+	\end{table}
+\end{frame}
 
 
 
+%SELECT data_file, ROUND(AVG(delta), 4), ROUND(STDEV(delta), 4), ROUND(MEDIAN(delta), 4), ROUND(MIN(delta), 4), ROUND(MAX(delta), 4) FROM compress_relative GROUP BY data_file;
+%random            1.0027    0.002     1.0027    0.9796    1.0075  
+%zero              0.6614    0.0943    0.6627    0.5164    0.84 
 
-%SELECT digest, AVG(relative_duration), STDEV(relative_duration), VARIANCE(relative_duration), MEDIAN(relative_duration), MIN(relative_duration), MAX(relative_duration) FROM digest_speedup GROUP BY digest ORDER BY AVG(relative_duration);
-%MD4               1.0               0.0                       0.0                          1.0                        1.0                     1.0                   
-%RSA-MD4           1.00271437204743  0.00660263879803101       4.35948390972643e-05         1.00126457320233           0.998507394787342       1.02716844997173      
-%MD5               1.00816258005677  0.00192639327299832       3.71099104225319e-06         1.00838704264624           1.00390089962259        1.01110439669981      
-%RSA-MD5           1.00915905190579  0.00197173559508165       3.887741256912e-06           1.00918408378512           1.00501039031015        1.0114406171063       
-%ecdsa-with-SHA1   1.04935501161205  0.00981130211338772       9.62616491601663e-05         1.05085676567269           1.03117578352191        1.06433762663526      
-%DSA-SHA1-old      1.04978428844599  0.00941661235972336       8.86725883332948e-05         1.05123892180805           1.03279726227441        1.06310276409123      
-%SHA1              1.05019514116545  0.00935886903795291       8.75884296695537e-05         1.05072434682251           1.0320210182297         1.0627190757304       
-%DSA-SHA           1.05047320709949  0.00989587436335827       9.79283294153714e-05         1.05231138155987           1.03278745817922        1.06487008983569      
-%RSA-SHA1-2        1.05052577910164  0.00954634451494052       9.1132693597935e-05          1.05246457638728           1.03297276260857        1.0656372143474       
-%RSA-SHA1          1.05063376736583  0.00974701116027844       9.50042265585926e-05         1.05239347194804           1.03235752595155        1.06503283512805      
-%DSA-SHA1          1.05071155242253  0.0101919405263127        0.000103875651691895         1.05100390467966           1.03273342405906        1.06539529776917      
-%DSA               1.05093251296645  0.00949769630835372       9.02062351657158e-05         1.05199284530735           1.03355611569252        1.0644385929938       
-%RIPEMD160         1.07406546296105  0.0140479997271429        0.000197346296333806         1.07455401391244           1.04922403434101        1.09362306361536      
-%RSA-RIPEMD160     1.07460013297992  0.0146530449865003        0.000214711727376402         1.07611572142508           1.05028238778085        1.09488763326041      
-%RSA-SHA           1.08459711715991  0.0160793180898205        0.000258544470233629         1.08729031663704           1.05739318338187        1.10727774546614      
-%SHA               1.08568805072621  0.0164602507888319        0.000270939856031242         1.08628998337921           1.05816335431023        1.11014449500739      
-%RSA-SHA224        1.13302942731881  0.0245626257219057        0.000603322582354423         1.13457218087411           1.09065546640849        1.16953386127308      
-%SHA224            1.1331132979772   0.0241332785087205        0.000582415131579473         1.1345571136319            1.09114326038719        1.16868896881236      
-%SHA256            1.13669623286476  0.0254288472087551        0.000646626270366211         1.13689312399519           1.09415490469123        1.17349523239802      
-%RSA-SHA256        1.13692764554951  0.0253204226401622        0.000641123802676437         1.13694004631061           1.09444696434254        1.17404992363399      
-%RSA-SHA512        1.2056317906217   0.0383295980126166        0.00146915808380878          1.20975131386547           1.15035841266295        1.25614200552596      
-%SHA512            1.20602410054288  0.0379355547011564        0.00143910631048443          1.21131928720712           1.15059599304596        1.25929420151703      
-%SHA384            1.21062884861575  0.039655668805144         0.00157257206838327          1.21639992360959           1.15213447596477        1.26507769752781      
-%RSA-SHA384        1.21077129797989  0.0395682105650139        0.00156564328731728          1.21630574403879           1.15250217998863        1.26346963946085      
-%whirlpool         1.32702994678082  0.0588680191009538        0.00346544367287026          1.3344474495563            1.24010286481432        1.40645259891167 
+
+%SELECT cipher, ROUND(AVG(relative_duration), 4), ROUND(STDEV(relative_duration),4), ROUND(MEDIAN(relative_duration), 4), ROUND(MIN(relative_duration), 4), ROUND(MAX(relative_duration), 4) FROM cipher_speedup GROUP BY cipher ORDER BY AVG(relative_duration);
+%BF-CBC            1.0       0.0       1.0       1.0       1.0     
+%CAMELLIA-128-CBC  1.0148    0.0036    1.014     1.0096    1.0236  
+%CAMELLIA-256-CBC  1.0573    0.0044    1.0583    1.0456    1.0655  
+%CAMELLIA-192-CBC  1.058     0.0046    1.0599    1.0467    1.0663  
+%CAST5-CBC         1.0781    0.0078    1.0799    1.0603    1.0894  
+%DES-CBC           1.1026    0.0119    1.1034    1.0776    1.1402  
+%SEED-CBC          1.1045    0.0068    1.1058    1.0852    1.1147  
+%DESX-CBC          1.1134    0.0109    1.1159    1.0887    1.1321  
+%AES-128-CBC       1.2823    0.0221    1.2867    1.2235    1.3078  
+%AES-192-CBC       1.3687    0.0293    1.376     1.2925    1.4016  
+%RC2-64-CBC        1.4211    0.0364    1.4294    1.3309    1.4679  
+%RC2-40-CBC        1.4213    0.0368    1.4306    1.3314    1.4694  
+%RC2-CBC           1.4213    0.0365    1.4315    1.3318    1.4687  
+%AES-256-CBC       1.4553    0.0376    1.4671    1.3593    1.498   
+%DES-EDE-CBC       1.5821    0.0508    1.5934    1.4585    1.6539  
+%DES-EDE3-CBC      1.5824    0.0504    1.592     1.4599    1.6551
+
+
+
+%SELECT digest, ROUND(AVG(relative_duration), 4), ROUND(STDEV(relative_duration),4), ROUND(MEDIAN(relative_duration), 4), ROUND(MIN(relative_duration), 4), ROUND(MAX(relative_duration), 4) FROM digest_speedup GROUP BY digest ORDER BY AVG(relative_duration);
+%MD4               1.0       0.0       1.0       1.0       1.0     
+%RSA-MD4           1.0027    0.0066    1.0013    0.9985    1.0272  
+%MD5               1.0082    0.0019    1.0084    1.0039    1.0111  
+%RSA-MD5           1.0092    0.002     1.0092    1.005     1.0114  
+%ecdsa-with-SHA1   1.0494    0.0098    1.0509    1.0312    1.0643  
+%DSA-SHA1-old      1.0498    0.0094    1.0512    1.0328    1.0631  
+%SHA1              1.0502    0.0094    1.0507    1.032     1.0627  
+%DSA-SHA           1.0505    0.0099    1.0523    1.0328    1.0649  
+%RSA-SHA1-2        1.0505    0.0095    1.0525    1.033     1.0656  
+%RSA-SHA1          1.0506    0.0097    1.0524    1.0324    1.065   
+%DSA-SHA1          1.0507    0.0102    1.051     1.0327    1.0654  
+%DSA               1.0509    0.0095    1.052     1.0336    1.0644  
+%RIPEMD160         1.0741    0.014     1.0746    1.0492    1.0936  
+%RSA-RIPEMD160     1.0746    0.0147    1.0761    1.0503    1.0949  
+%RSA-SHA           1.0846    0.0161    1.0873    1.0574    1.1073  
+%SHA               1.0857    0.0165    1.0863    1.0582    1.1101  
+%RSA-SHA224        1.133     0.0246    1.1346    1.0907    1.1695  
+%SHA224            1.1331    0.0241    1.1346    1.0911    1.1687  
+%SHA256            1.1367    0.0254    1.1369    1.0942    1.1735  
+%RSA-SHA256        1.1369    0.0253    1.1369    1.0944    1.174   
+%RSA-SHA512        1.2056    0.0383    1.2098    1.1504    1.2561  
+%SHA512            1.206     0.0379    1.2113    1.1506    1.2593  
+%SHA384            1.2106    0.0397    1.2164    1.1521    1.2651  
+%RSA-SHA384        1.2108    0.0396    1.2163    1.1525    1.2635  
+%whirlpool         1.327     0.0589    1.3344    1.2401    1.4065
+
+%SELECT cipher, digest, ROUND(duration/(SELECT MIN(duration) FROM cip_dig_tt), 4) FROM cip_dig_tt ORDER BY duration ASC LIMIT 15;
+%BF-CBC & MD4 & 1.0
+%BF-CBC & RSA-MD4 & 1.0027
+%BF-CBC & MD5 & 1.0102
+%BF-CBC & RSA-MD5 & 1.0114
+%CAMELLIA-128-CBC & MD4 & 1.0126
+%CAMELLIA-128-CBC & RSA-MD4 & 1.0133
+%CAMELLIA-128-CBC & MD5 & 1.022
+%CAMELLIA-128-CBC & RSA-MD5 & 1.0237
+%BF-CBC & ecdsa-with-SHA1 & 1.0596
+%CAMELLIA-256-CBC & MD4 & 1.0599
+%BF-CBC & SHA1 & 1.0612
+%BF-CBC & RSA-SHA1 & 1.0613
+%CAMELLIA-192-CBC & MD4 & 1.0615
+%BF-CBC & RSA-SHA1-2 & 1.0616
+%BF-CBC & DSA & 1.0617
 
 \begin{frame}
 	\frametitle{Záver}
 	\begin{itemize}
-		\item TODO
+		\item kompresia zero vs. random
+		\item najrýchlejšia šifra: BF-CBC (AES, 3DES o 30-60\% pomalšie)
+		\item najrýchlejší haš: MD4, MD5 (ale bezpečnosť...)
+		\item vhodný kompromis: SHA1 (5\% pomalšie ako MD4)
+		\item OpenVPN default: BF-CBC, SHA1 :-)
 	\end{itemize}
 
+	\begin{columns}
+		\tiny
+		\column[t]{0.4\textwidth}
+			\begin{tabular}{|r|l|l|l|}
+				\hline
+					\ & šifra & haš & čas \\ \hline
+1 & BF-CBC & MD4 & 1.0 \\ \hline
+2 & BF-CBC & RSA-MD4 & 1.0027 \\ \hline
+3 & BF-CBC & MD5 & 1.0102 \\ \hline
+4 & BF-CBC & RSA-MD5 & 1.0114 \\ \hline
+\dots & \dots & \dots & \dots \\ \hline
+11 & BF-CBC & SHA1 & 1.0612 \\ \hline
+			\end{tabular}
+		\column[t]{0.5\textwidth}
+			\begin{tabular}{|r|l|l|l|}
+				\hline
+					\ & šifra & haš & čas \\ \hline
+\dots & \dots & \dots & \dots \\ \hline
+396 & DES-EDE3-CBC & SHA384 & 1.9069 \\ \hline
+397 & DES-EDE3-CBC & RSA-SHA384 & 1.9082 \\ \hline
+398 & AES-256-CBC & whirlpool & 1.9115 \\ \hline
+399 & DES-EDE-CBC & whirlpool & 2.051 \\ \hline
+400 & DES-EDE3-CBC & whirlpool & 2.053 \\ \hline
+			\end{tabular}
+	\end{columns}
+
 	\bigskip
-	Odkazy:
 	\small
+	Odkazy:
+	\footnotesize
 	\begin{itemize}
 		\item \href{https://github.com/laciKE/openvpn\_test/}{https://github.com/laciKE/openvpn\_test/}
 		\item \href{https://openvpn.net/index.php/open-source/documentation/miscellaneous/78-static-key-mini-howto.html}{https://openvpn.net/index.php/open-source/documentation/miscellaneous/78-static-key-mini-howto.html}
 	\end{itemize}
 \end{frame}
-
 
 
 \end{document}

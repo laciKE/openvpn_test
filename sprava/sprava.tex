@@ -179,7 +179,7 @@ Na meranie času sme použili príkaz \verb|date '+%s.%N'| tesne pred a~tesne
 po príkaze \verb|nc|, čo je výrazne jednoduchšie, než parsovať výstup
 príkazu \verb|time|.
 
-\subsection{Použité prostredie}
+\subsection{Testovacie prostredie}
 
 Na testovanie bola použitá dvojica identických počítačov s~procesorom
 Intel Pentium 4 s~taktovacou frekvenciou 2.80GHz, 1GB RAM a~operačným
@@ -196,7 +196,11 @@ kryptografických operácií, či už periférne moduly, alebo rozšírenia
 inštrukčnej sady procesora, preto všetky operácie museli prebehnúť
 softwarovo.
 
-\subsection{Postrehnuté komplikácie} %postretnuté je hodne zastarané slovo
+Meranie v~tomto prostredí trvalo takmer 30 hodín, počas ktorých bolo
+prostredníctvom OpenVPN prenesených 1000 GB dát medzi testovacími
+počítačmi.
+
+\subsection{Komplikácie}
 
 Počas púšťania testov sme narazili na dve komplikácie hodné zmienky.
 
@@ -459,6 +463,8 @@ v~šifre AES; tieto rozšírenia pravdepodobne posunú AES prinajmenšom do
 hornej polovice tabuľky. Je však možné, že zrýchlia aj niektoré iné šifry,
 keďže viacero testovaných šifrovacích algoritmov používa niektoré rovnaké
 operácie ako AES.
+
+\vfill
 
 \renewcommand{\refname}{Literatúra}
 \phantomsection

@@ -83,7 +83,9 @@ language=python
 OpenVPN \cite{openvpn} je populárny multiplatformový open-source nástroj
 na vytváranie virtuálnych privátnych sietí. Na zaručenie dôvernosti
 a~integrity dát tečúcich cez takúto sieť sú použité kryptografické
-prostriedky, ktoré vyžadujú netriviálne výpočty.
+prostriedky, ktoré vyžadujú netriviálne výpočty. V~prípade dôvernosti ide
+o~šifrovací algoritmus, na integritu a~autenticitu správ využíva OpenVPN
+funkciu HMAC v~kombinácii s~voliteľnou hašovacou funkciou.
 
 Cieľom tejto práce je experimentálne určiť vplyv použitých nastavení
 OpenVPN na priepustnosť vytvorenej siete. Konkrétne ide o~použitý

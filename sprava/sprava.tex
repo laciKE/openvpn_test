@@ -253,8 +253,122 @@ očakávali značné zrýchlenie. Z~tabuľky vyplýva, že zrýchlenie bolo celk
 konzistentne o~približne jednu tretinu, s~relatívne malou disperziou.
 
 \subsection{Porovnanie šifrovacích algoritmov}
+\label{sec:cipher-comparison}
+
+Štatistiky pre toto porovnanie sme vytvárali iba na základe prenosu
+náhodného súboru bez kompresie.
+
+Najprv sme identifikovali algoritmus Blowfish ako konzistentne
+najrýchlejší. Následne sme pre každý hašovací algoritmus vydelili čas
+prenosu časom pre šifru Blowfish, čím sme vyjadrili relatívne spomalenie
+každého šifrovacieho algoritmu oproti Blowfish pri danej hašovacej funkcii.
+
+Nakoniec sme pre každý šifrovací algoritmus spočítali štatistiku
+relatívnych spomalení, ktorú možno vidieť v~tabuľke
+\ref{tbl:cipher-comparison}.
+
+\begin{table}\centering
+    \caption{Vplyv šifrovacieho algoritmu na čas prenosu; čas prenosu pri použití BF-CBC: 1}
+    \label{tbl:cipher-comparison}
+    \begin{tabular}{|l||l|l|l|l|l|}
+        \hline
+        \bf šifra & \bf  avg & \bf stdev & \bf median & \bf min & \bf max \\ \hline 
+        BF-CBC & 1.0 & 0.0 & 1.0 & 1.0 & 1.0\\ \hline
+        CAMELLIA-128-CBC & 1.0148 & 0.0036 & 1.014 & 1.0096 & 1.0236 \\ \hline
+        CAMELLIA-256-CBC & 1.0573 & 0.0044 & 1.0583 & 1.0456 & 1.0655 \\ \hline
+        CAMELLIA-192-CBC & 1.058 & 0.0046 & 1.0599 & 1.0467 & 1.0663 \\ \hline
+        CAST5-CBC & 1.0781 & 0.0078 & 1.0799 & 1.0603 & 1.0894 \\ \hline
+        DES-CBC & 1.1026 & 0.0119 & 1.1034 & 1.0776 & 1.1402 \\ \hline
+        SEED-CBC & 1.1045 & 0.0068 & 1.1058 & 1.0852 & 1.1147 \\ \hline
+        DESX-CBC & 1.1134 & 0.0109 & 1.1159 & 1.0887 & 1.1321 \\ \hline
+        AES-128-CBC & 1.2823 & 0.0221 & 1.2867 & 1.2235 & 1.3078 \\ \hline
+        AES-192-CBC & 1.3687 & 0.0293 & 1.376 & 1.2925 & 1.4016 \\ \hline
+        RC2-64-CBC & 1.4211 & 0.0364 & 1.4294 & 1.3309 & 1.4679 \\ \hline
+        RC2-40-CBC & 1.4213 & 0.0368 & 1.4306 & 1.3314 & 1.4694 \\ \hline
+        RC2-CBC & 1.4213 & 0.0365 & 1.4315 & 1.3318 & 1.4687 \\ \hline
+        AES-256-CBC & 1.4553 & 0.0376 & 1.4671 & 1.3593 & 1.498 \\ \hline
+        DES-EDE-CBC & 1.5821 & 0.0508 & 1.5934 & 1.4585 & 1.6539 \\ \hline
+        DES-EDE3-CBC & 1.5824 & 0.0504 & 1.592 & 1.4599 & 1.6551 \\ \hline
+    \end{tabular}
+\end{table}
+
+Ako najpomalší algoritmus sa ukázal trojitý DES vo variantoch s~jedným
+a~tromi kľúčmi. AES a~RC2 boli tiež výrazne pomalšie, než Blowfish, zatiaľ
+čo Camellia je iba nepatrne pomalšia oproti Blowfish.
 
 \subsection{Porovnanie hašovacích funkcií}
+
+Pri tomto porovnaní sme opäť vychádzali iba z~časov prenosu náhodného
+súboru bez kompresie.
+
+Postup pri vytváraní štatistík bol podobný ako v~časti
+\ref{sec:cipher-comparison}, s~tým rozdielom, že tentokrát sme
+identifikovali ako najrýchlejšiu funkciu MD4 a~časy prenosu sme
+normalizovali na relatívne spomalenie oproti tejto funkcii.
+Výsledok je v~tabuľke \ref{tbl:digest-comparison}.
+
+\begin{table}\centering
+    \caption{Vplyv hašovacej funkcie na čas prenosu; čas prenosu pri použití MD4: 1}
+    \label{tbl:digest-comparison}
+    \begin{tabular}{|l||l|l|l|l|l|}
+        \hline
+        \bf haš & \bf  avg & \bf stdev & \bf median & \bf min & \bf max \\ \hline 
+        MD4 & 1.0 & 0.0 & 1.0 & 1.0 & 1.0 \\ \hline
+        RSA-MD4 & 1.0027 & 0.0066 & 1.0013 & 0.9985 & 1.0272 \\ \hline
+        MD5 & 1.0082 & 0.0019 & 1.0084 & 1.0039 & 1.0111 \\ \hline
+        RSA-MD5 & 1.0092 & 0.002 & 1.0092 & 1.005 & 1.0114 \\ \hline
+        ecdsa-with-SHA1 & 1.0494 & 0.0098 & 1.0509 & 1.0312 & 1.0643 \\ \hline
+        DSA-SHA1-old & 1.0498 & 0.0094 & 1.0512 & 1.0328 & 1.0631 \\ \hline
+        SHA1 & 1.0502 & 0.0094 & 1.0507 & 1.032 & 1.0627 \\ \hline
+        DSA-SHA & 1.0505 & 0.0099 & 1.0523 & 1.0328 & 1.0649 \\ \hline
+        RSA-SHA1-2 & 1.0505 & 0.0095 & 1.0525 & 1.033 & 1.0656 \\ \hline
+        RSA-SHA1 & 1.0506 & 0.0097 & 1.0524 & 1.0324 & 1.065 \\ \hline
+        DSA-SHA1 & 1.0507 & 0.0102 & 1.051 & 1.0327 & 1.0654 \\ \hline
+        DSA & 1.0509 & 0.0095 & 1.052 & 1.0336 & 1.0644 \\ \hline
+        RIPEMD160 & 1.0741 & 0.014 & 1.0746 & 1.0492 & 1.0936 \\ \hline
+        RSA-RIPEMD160 & 1.0746 & 0.0147 & 1.0761 & 1.0503 & 1.0949 \\ \hline
+        RSA-SHA & 1.0846 & 0.0161 & 1.0873 & 1.0574 & 1.1073 \\ \hline
+        SHA & 1.0857 & 0.0165 & 1.0863 & 1.0582 & 1.1101 \\ \hline
+        RSA-SHA224 & 1.133 & 0.0246 & 1.1346 & 1.0907 & 1.1695 \\ \hline
+        SHA224 & 1.1331 & 0.0241 & 1.1346 & 1.0911 & 1.1687 \\ \hline
+        SHA256 & 1.1367 & 0.0254 & 1.1369 & 1.0942 & 1.1735 \\ \hline
+        RSA-SHA256 & 1.1369 & 0.0253 & 1.1369 & 1.0944 & 1.174 \\ \hline
+        RSA-SHA512 & 1.2056 & 0.0383 & 1.2098 & 1.1504 & 1.2561 \\ \hline
+        SHA512 & 1.206 & 0.0379 & 1.2113 & 1.1506 & 1.2593 \\ \hline
+        SHA384 & 1.2106 & 0.0397 & 1.2164 & 1.1521 & 1.2651 \\ \hline
+        RSA-SHA384 & 1.2108 & 0.0396 & 1.2163 & 1.1525 & 1.2635 \\ \hline
+        whirlpool & 1.327 & 0.0589 & 1.3344 & 1.2401 & 1.4065 \\ \hline
+    \end{tabular}
+\end{table}
+
+V~jednom prípade prebehol prenos najrýchlejšie pri použití funkcie MD4
+v~kombinácii s~podpisom pomocou RSA, čo je dôvod pre minimum menšie ako 1
+v~druhom riadku tabuľky. Vo všetkých ostatných prípadoch samotná funkcia
+MD4 prebehla najrýchlejšie.
+
+Z~nám neznámych dôvodov knižnica OpenSSL poskytuje aplikáciám hašovacie
+funkcie v~kombinácii s~podpisovými schémami RSA a~DSA, pričom z~hľadiska
+aplikačného rozhrania ich neodlišuje od klasických hašovacích funkcií.
+Nepodarilo sa nám zistiť, aký kľúč sa pri takýchto funkciách používa, ani
+akú výhodu majú oproti samotným hašovacím funkciám (keďže sú používané
+čisto ako hašovacie funkcie, nie na podpis).
+
+Každopádne, podpísanie výsledku sa vo všetkých prípadoch prejavilo iba
+minimálne, niekedy dokonca prebehlo rýchlejšie, než bez podpisu.
+
+Funkcie MD4 a~MD5 boli suverénne najrýchlejšie, ibaže v~dnešnej dobe sa
+už neodporúča používať ktorúkoľvek funkciu v~nových protokoloch
+a~aplikáciách \cite{rfc-md4-obsolete, rfc-hmac-md5}.
+
+Funkcia SHA1 sa ukázala byť iba mierne pomalšia. Keďže podľa našich
+informácií pre túto funkciu doteraz nevyšlo odporúčanie nepoužívať ju ako
+hašovaciu funkciu pre HMAC, javí sa táto funkcia ako dobrý kandidát
+poskytujúci dostatočnú bezpečnosť bez výrazného negatívneho vplyvu na
+výkon. RIPEMD160 je tiež vhodný kandidát, ktorý je iba nepatrne pomalší
+oproti SHA1, pre ktorý nie je zatiaľ známy žiaden útok.
+
+Varianty SHA s~väčšou dĺžkou bloku sa ukázali ako nezanedbateľne pomalšie
+a~Whirlpool sa umiestnil na poslednom mieste.
 
 \section{Záver}
 
@@ -266,5 +380,7 @@ konzistentne o~približne jednu tretinu, s~relatívne malou disperziou.
   \bibitem{openvpn} \url{http://openvpn.net/index.php/open-source.html} -- Domovská stránka OpenVPN.
   \bibitem{openvpn-static} \url{http://openvpn.net/index.php/open-source/documentation/miscellaneous/78-static-key-mini-howto.html} -- Návod na jednoduché nastavenie statického zdieľaného kľúča pre OpenVPN.
   \bibitem{sqlite} \url{http://sqlite.org/} -- Domovská stránka SQLite.
+  \bibitem{rfc-md4-obsolete} \url{http://tools.ietf.org/html/rfc6150} -- RFC 6150: MD4 to Historic Status.
+  \bibitem{rfc-hmac-md5} \url{http://tools.ietf.org/html/rfc6151} -- RFC 6151: Updated Security Considerations for the MD5 Message-Digest and the HMAC-MD5 Algorithms.
 \end{thebibliography}
 \end{document}

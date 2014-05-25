@@ -435,9 +435,14 @@ najrýchlejšia kombinácia nastavení.
 Predvolené hodnoty v~OpenVPN sú Blowfish ako šifrovací algoritmus a~SHA1
 ako hašovacia funkcia. Tieto nastavenia sa ukázali ako najrýchlejšie
 s~rozumnou zárukou dôvernosti, autentickosti a~integrity so spomalením
-približne 1.06 oproti Blowfish s~MD4. Pre ešte lepšie
-záruky je vhodná kombinácia šifry Camellia a~funkcie RIPEMD160, ktorej
-spomalenie oproti najrýchlejšej kombinácii je približne 1.11.
+približne 1.06 oproti Blowfish s~MD4. Pre ešte lepšie záruky je vhodná
+kombinácia šifry Camellia a~funkcie RIPEMD160, ktorej spomalenie oproti
+najrýchlejšej kombinácii je približne 1.11.
+
+Na opačnom konci spektra sa umiestnili kombinácie trojitej šifry DES a~AES
+s~256-bitovým kľúčom s~funkciou Whirlpool, ktoré poskytujú približne
+polovičnú priepustnosť oproti najrýchlejšej konfigurácii s~diskutabilnými
+bezpečnostnými výhodami v~porovnaní s~vyššie spomínanými kombináciami.
 
 Existuje viacero smerov, ako ďalej pokračovať v~tejto práci. Jednou
 možnosťou je pre\-skú\-mať vplyv adaptívnej kompresie OpenVPN, ktorá sa snaží

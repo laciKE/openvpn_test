@@ -89,7 +89,7 @@ funkciu HMAC v~kombinácii s~voliteľnou hašovacou funkciou.
 
 Cieľom tejto práce je experimentálne určiť vplyv použitých nastavení
 OpenVPN na priepustnosť vytvorenej siete. Konkrétne ide o~použitý
-šifrovací algoritmus, použitá hašovacia funkcia a~vplyv použitia kompresie
+šifrovací algoritmus, použitú hašovaciu funkciu a~vplyv použitia kompresie
 na prenesené dáta.
 
 \section{Spôsob merania}
@@ -99,8 +99,8 @@ boli merania vykonané.
 
 \subsection{Nastavenia OpenVPN}
 
-OpenVPN poskytuje viacero spôsobov, ktorými sa vytvára spojenie medzi
-koncovými uzlami, medzi ktorými OpenVPN vytvára tunel. Tradičný spôsob
+OpenVPN poskytuje viacero spôsobov na vytvorenie spojenia medzi
+koncovými uzlami, medzi ktorými sa vytvára tunel. Tradičný spôsob
 využíva PKI na overenie autenticity účastníkov a~vygenerovanie
 symetrických kľúčov pre konkrétnu session.
 
@@ -196,11 +196,11 @@ kryptografických operácií, či už periférne moduly, alebo rozšírenia
 inštrukčnej sady procesora, preto všetky operácie museli prebehnúť
 softwarovo.
 
-\subsection{Postretnuté komplikácie}
+\subsection{Postrehnuté komplikácie} %postretnuté je hodne zastarané slovo
 
 Počas púšťania testov sme narazili na dve komplikácie hodné zmienky.
 
-Prvou bolo, že napriek tomu, že OpenVPN hlásilo 58 rôznych podporovaných
+Prvou bolo, že napriek hláseniu OpenVPN o 58 rôznych podporovaných
 šifrovacích algoritmov, v~skutočnosti bolo možné použiť iba 16 z~nich.
 Súčasťou špecifikácie šifrovacieho algoritmu totiž je aj použitý blokový
 mód a~v~našej konfigurácii OpenVPN umožňovalo použiť iba mód CBC.
@@ -233,16 +233,15 @@ kompresie a~časom s~kompresiou. Pre náhodný aj nulový súbor sme následne
 spravili štatistiku týchto pomerov cez všetky dvojice šifry a~hašovacej
 funkcie. Výsledok je možné vidieť v~tabuľke \ref{tbl:compression}.
 
-\begin{table}\centering
-    \caption{Vplyv kompresie na čas prenosu; čas prenosu bez kompresie: 1}
-    \label{tbl:compression}
-
+\begin{table}[h]\centering
     \begin{tabular}{|l||l|l|l|l|l|}
         \hline
         \bf súbor & \bf  avg & \bf stdev & \bf median & \bf min & \bf max \\ \hline 
         random & 1.0027 & 0.002 & 1.0027 & 0.9796 & 1.0075 \\ \hline
         zero & 0.6614 & 0.0943 & 0.6627 & 0.5164 & 0.84\\ \hline
     \end{tabular}
+    \caption{Vplyv kompresie na čas prenosu; čas prenosu bez kompresie: 1}
+    \label{tbl:compression}
 \end{table}
 
 Ako tabuľka naznačuje, pre náhodný súbor, ktorý je veľmi ťažko
@@ -252,7 +251,7 @@ mierne spomalenie.
 
 V~prípade nulového súboru, ktorý je veľmi dobre komprimovateľný, sme
 očakávali značné zrýchlenie. Z~tabuľky vyplýva, že zrýchlenie bolo celkom
-konzistentne o~približne jednu tretinu, s~relatívne malou disperziou.
+konzistentné o~približne jednu tretinu, s~relatívne malou disperziou.
 
 \subsection{Porovnanie šifrovacích algoritmov}
 \label{sec:cipher-comparison}
@@ -269,10 +268,8 @@ Nakoniec sme pre každý šifrovací algoritmus spočítali štatistiku
 relatívnych spomalení, ktorú možno vidieť v~tabuľke
 \ref{tbl:cipher-comparison}.
 
-\begin{table}\centering
-    \caption{Vplyv šifrovacieho algoritmu na čas prenosu; čas prenosu pri použití BF-CBC: 1}
-    \label{tbl:cipher-comparison}
-    \begin{tabular}{|l||l|l|l|l|l|}
+\begin{table}[h]\centering
+   \begin{tabular}{|l||l|l|l|l|l|}
         \hline
         \bf šifra & \bf  avg & \bf stdev & \bf median & \bf min & \bf max \\ \hline 
         BF-CBC & 1.0 & 0.0 & 1.0 & 1.0 & 1.0\\ \hline
@@ -292,6 +289,8 @@ relatívnych spomalení, ktorú možno vidieť v~tabuľke
         DES-EDE-CBC & 1.5821 & 0.0508 & 1.5934 & 1.4585 & 1.6539 \\ \hline
         DES-EDE3-CBC & 1.5824 & 0.0504 & 1.592 & 1.4599 & 1.6551 \\ \hline
     \end{tabular}
+    \caption{Vplyv šifrovacieho algoritmu na čas prenosu; čas prenosu pri použití BF-CBC: 1}
+    \label{tbl:cipher-comparison}
 \end{table}
 
 Ako najpomalší algoritmus sa ukázal trojitý DES vo variantoch s~jedným
@@ -316,9 +315,7 @@ identifikovali ako najrýchlejšiu funkciu MD4 a~časy prenosu sme
 normalizovali na relatívne spomalenie oproti tejto funkcii.
 Výsledok je v~tabuľke \ref{tbl:digest-comparison}.
 
-\begin{table}\centering
-    \caption{Vplyv hašovacej funkcie na čas prenosu; čas prenosu pri použití MD4: 1}
-    \label{tbl:digest-comparison}
+\begin{table}[h]\centering
     \begin{tabular}{|l||l|l|l|l|l|}
         \hline
         \bf haš & \bf  avg & \bf stdev & \bf median & \bf min & \bf max \\ \hline 
@@ -348,6 +345,8 @@ Výsledok je v~tabuľke \ref{tbl:digest-comparison}.
         RSA-SHA384 & 1.2108 & 0.0396 & 1.2163 & 1.1525 & 1.2635 \\ \hline
         whirlpool & 1.327 & 0.0589 & 1.3344 & 1.2401 & 1.4065 \\ \hline
     \end{tabular}
+    \caption{Vplyv hašovacej funkcie na čas prenosu; čas prenosu pri použití MD4: 1}
+    \label{tbl:digest-comparison}
 \end{table}
 
 V~jednom prípade prebehol prenos najrýchlejšie pri použití funkcie MD4
@@ -374,7 +373,7 @@ informácií pre túto funkciu doteraz nevyšlo odporúčanie nepoužívať ju a
 hašovaciu funkciu pre HMAC, javí sa táto funkcia ako dobrý kandidát
 poskytujúci dostatočnú bezpečnosť bez výrazného negatívneho vplyvu na
 výkon. RIPEMD160 je tiež vhodný kandidát, ktorý je iba nepatrne pomalší
-oproti SHA1, pre ktorý nie je zatiaľ známy žiaden útok.
+oproti SHA1 a pre ktorý nie je zatiaľ známy žiaden útok.
 
 Varianty SHA s~väčšou dĺžkou bloku sa ukázali ako nezanedbateľne pomalšie
 a~Whirlpool sa umiestnil na poslednom mieste.
@@ -384,7 +383,7 @@ a~Whirlpool sa umiestnil na poslednom mieste.
 V~tejto práci sme experimentálne odmerali vplyv kompresie, použitej šifry
 a~použitej hašovacej funkcie na priepustnosť OpenVPN tunelov.
 
-V~prípade kompresie sa ukázalo, že v~prípade veľmi dobre komprimovateľných
+V~prípade kompresie sa ukázalo, že pri prenose veľmi dobre komprimovateľných
 dát stúpla rýchlosť približne na jedenapolnásobok. Vzhľadom na to, že
 tieto dáta sa dajú skomprimovať veľmi rýchlo na približne $1/900$, tento
 výsledok nás mierne sklamal. Napriek tomu však isté zlepšenie pre takéto
@@ -407,9 +406,7 @@ najrýchlejšej kombinácii. Navyše prikladáme pre porovnanie aj rýchlosť
 prenosu mimo VPN tunela, ktorá bola približne osemkrát vyššia, než
 najrýchlejšia kombinácia nastavení.
 
-\begin{table}\centering
-    \caption{Celkové poradie vybratých konfigurácií}
-    \label{tbl:config-chart}
+\begin{table}[h]\centering
     \begin{tabular}{|r|l|l|l|}
         \hline
             \ & šifra & haš & čas \\ \hline
@@ -430,6 +427,8 @@ najrýchlejšia kombinácia nastavení.
             399 & DES-EDE-CBC & whirlpool & 2.051 \\ \hline
             400 & DES-EDE3-CBC & whirlpool & 2.053 \\ \hline
     \end{tabular}
+    \caption{Celkové poradie vybratých konfigurácií}
+    \label{tbl:config-chart}
 \end{table}
 
 Predvolené hodnoty v~OpenVPN sú Blowfish ako šifrovací algoritmus a~SHA1

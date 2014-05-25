@@ -9,9 +9,10 @@
 \usepackage{amssymb}
 \usepackage{hyperref}
 \usepackage{multicol}
+\usepackage{fancyvrb}
 
 \usepackage{epstopdf}
-\linespread{1.5}
+%\linespread{1.5}
 
 \lstset{
 language=python
@@ -80,19 +81,136 @@ language=python
 \section{Úvod}
 
 OpenVPN je populárny multiplatformový nástroj na vytváranie virtuálnych
-privátnych sietí.
-TODO: omáčka a~formulácia zadania
+privátnych sietí. Na zaručenie dôvernosti a~integrity dát tečúcich cez
+takúto sieť sú použité kryptografické prostriedky, ktoré vyžadujú
+netriviálne výpočty.
+
+Cieľom tejto práce je experimentálne určiť vplyv použitých nastavení
+OpenVPN na priepustnosť vytvorenej siete. Konkrétne ide o~použitý
+šifrovací algoritmus, použitá hašovacia funkcia a~vplyv použitia kompresie
+na prenesené dáta.
 
 \section{Spôsob merania}
-TODO: lepší názov pre sekciu
+
+V~tejto sekcii popíšeme metódy použité pri meraní a~prostredie, v~ktorom
+boli merania vykonané.
 
 \subsection{Nastavenia OpenVPN}
 
+OpenVPN poskytuje viacero spôsobov, ktorými sa vytvára spojenie medzi
+koncovými uzlami, medzi ktorými OpenVPN vytvára tunel. Tradičný spôsob
+využíva PKI na overenie autenticity účastníkov a~vygenerovanie
+symetrických kľúčov pre konkrétnu session.
+
+Druhá možnosť je vopred vygenerovať priamo symetrické kľúče a~cez bezpečný
+kanál ich distribuovať medzi účastníkov. Pri tejto metóde odpadá nutnosť
+vytvárania certifikátov, ale je obmedzená na práve dvoch účastníkov, na
+rozdiel od PKI, kedy môže jeden server obsluhovať koľkokoľvek klientov.
+
+Keďže v~tejto práci využívame iba dvoch účastníkov, pre jednoduchosť sme
+zvolili statický zdieľaný kľúč.
+
+Merali sme vplyv troch parametrov na priepustnosť: šifrovací algoritmus,
+hašovacia funkcia a~použitie kompresie. Pre každú kombináciu týchto
+parametrov sme vytvorili dvojicu konfiguračných súborov pre OpenVPN podľa
+šablóny \ref{fig:openvpn-config-templates}.
+
+Zoznam podporovaných šifrovacích algoritmov a~hašovacích funkcií je možné
+získať prí\-kaz\-mi \verb|openvpn --show-ciphers| a~\verb|openvpn --show-digests|.
+Použitá verzia OpenVPN podporuje 58 rôznych šifrovacích algoritmov a~25
+hašovacích funkcií, čo vyžadovalo vysokú mieru automatizácie.
+
+\begin{figure}
+    \begin{minipage}{.49\linewidth}\centering
+        \begin{BVerbatim}
+dev tun
+remote $SERVER_IP
+ifconfig $CLIENT_VPN_IP \
+         $SERVER_VPN_IP
+secret $STATIC_KEY
+auth $DIGEST
+cipher $CIPHER
+comp-lzo [yes|no]
+        \end{BVerbatim}
+    \end{minipage}
+    \begin{minipage}{.49\linewidth}\centering
+        \begin{BVerbatim}
+dev tun
+ifconfig $SERVER_VPN_IP \
+         $CLIENT_VPN_IP
+secret $STATIC_KEY
+auth $DIGEST
+cipher $CIPHER
+comp-lzo [yes|no]
+        \end{BVerbatim}
+    \end{minipage}
+    \caption{Šablóny konfiguračných súborov pre OpenVPN klienta (vľavo)
+             a~server (vpravo).}
+    \label{fig:openvpn-config-templates}
+\end{figure}
+
 \subsection{Nástroje a~dáta}
+
+Keďže jedným z~cieľov je zistiť, ako sa prejavuje kompresia, je
+očakávateľné, že výsledky sa budú líšiť v~závislosti od toho, či prenášané
+dáta sú dobre komprimovateľné, alebo nie. Za týmto účelom sme zvolili dva
+súbory: jeden obsahujúci náhodné dáta a~jeden obsahujúci iba nuly.
+
+Pri prvotných testoch sa ukázalo, že systémový pseudonáhodný generátor
+\verb|/dev/urandom| na testovacích počítačoch stíhal produkovať výstup
+rýchlosťou najviac okolo 5 MB/s, preto bolo potrebné náhodný súbor vopred
+vygenerovať. Keďže rýchlosť čítania z~tradičných platňových diskov iba
+zriedkavo dosahuje hodnoty blížiace sa ku 100 MB/s, aby sme vylúčili vplyv
+rýchlosti čitania z~disku, testovacie súbory boli uložené v~ramdisku.
+
+Veľkosť súborov bola zvolená na 320 MB.
+
+Na prenos súborov po sieti bol použitý nástroj netcat. Každý súbor bol
+prenesený raz od klienta na server a~raz zo servera ku klientovi, pričom
+príjemca vždy súbor zahodil (\verb|/dev/null|). Keďže je pomerne náročné
+spoľahlivo merať čas prenosu na strane príjemcu iba s~použitím
+shellscriptu, merali sme iba čas behu \verb|nc| na strane odosielateľa,
+pričom na tejto strane \verb|nc| skončilo akonáhle odoslalo posledný byte
+vstupu.
+
+Na meranie času sme použili príkaz \verb|date '+%s.%N'| tesne pred a~tesne
+po príkaze \verb|nc|, čo je výrazne jednoduchšie, než parsovať výstup
+príkazu \verb|time|.
 
 \subsection{Použité prostredie}
 
-\subsection{Postretnutú komplikácie}
+Na testovanie bola použitá dvojica identických počítačov s~procesorom
+Intel Pentium 4 s~taktovacou frekvenciou 2.80GHz, 1GB RAM a~operačným
+systémom Debian GNU/Linux 7.4. Počítače sú spojené 1 GBit sieťou, čo
+v~kombinácii so starším procesorom zaručilo, že prenosová rýchlosť bola
+pri všetkých testoch obmedzená výpočtovým výkonom a~nie kapacitou linky.
+
+Použitá verzia OpenVPN je 2.2.1 a~keďže OpenVPN využíva implementácie
+kryptografických algoritmov z~OpenSSL, použitá verzia tejto knižnice je
+1.0.1e-2+deb7u6.
+
+\subsection{Postretnuté komplikácie}
+
+Počas púšťania testov sme narazili na dve komplikácie hodné zmienky.
+
+Prvou bolo, že napriek tomu, že OpenVPN hlásilo 58 rôznych podporovaných
+šifrovacích algoritmov, v~skutočnosti bolo možné použiť iba 16 z~nich.
+Súčasťou špecifikácie šifrovacieho algoritmu totiž je aj použitý blokový
+mód a~v~našej konfigurácii OpenVPN umožňovalo použiť iba mód CBC.
+
+Druhou komplikáciou bol zvláštne sa prejavujúci race condition. Po
+dokončení všetkých prenosov sa totiž reštartovala služba OpenVPN s~novými
+nastaveniami. Na strane odosielateľa sa to ale stávalo hneď po zapísaní
+posledného bytu vstupu do socketu, čo bolo občas skôr, než stihol príjemca
+spracovať celý súbor. Výsledkom bolo, že na strane príjemcu ešte \verb|nc|
+čítalo posledné byty prenášaného súboru, ale na strane odosielateľa bol
+zatiaľ VPN tunel ukončený. V~dôsledku tohto ostával proces \verb|nc| na
+strane príjemcu visieť v~nedefinovanom stave, snažiac sa čítať vstup zo
+socketu, ktorému ale medzičasom prestal existovať sieťový interface, teda
+tento proces ostával visieť nadobro.
+
+Tento race condition sme eliminovali uspaním odosielateľa na niekoľko
+sekúnd po poslednom prenose.
 
 \section{Výsledky}
 
@@ -100,7 +218,7 @@ TODO: lepší názov pre sekciu
 
 \subsection{Porovnanie šifrovacích algoritmov}
 
-\subsection{Porovnanie hašovacích algoritmov}
+\subsection{Porovnanie hašovacích funkcií}
 
 \section{Záver}
 

@@ -221,7 +221,9 @@ sekúnd po poslednom prenose.
 
 \section{Výsledky}
 
-Výsledky sme spracúvali s~pomocou databázy SQLite \cite{sqlite}. Namerané
+Výsledky sme spracúvali s~pomocou databázy SQLite \cite{sqlite} 
+s~rozšírením pre matematické a reťazcové funkcie 
+\texttt{extensions-functions.c} \cite{sqlite-contrib}. Namerané
 dáta spolu s~SQL dotazmi použitými na vypočítanie štatistík popísaných
 v~tejto časti sú dostupné v~projektovom repozitári \cite{proj}.
 
@@ -247,7 +249,9 @@ funkcie. Výsledok je možné vidieť v~tabuľke \ref{tbl:compression}.
 Ako tabuľka naznačuje, pre náhodný súbor, ktorý je veľmi ťažko
 komprimovateľný, použitie kompresie prinieslo iba zanedbateľné zrýchlenie
 vo veľmi obmedzenom počte prípadov; skôr naopak, väčšinou spôsobilo veľmi
-mierne spomalenie.
+mierne spomalenie, čo je v súlade s dokumentáciou OpenVPN
+\cite{openvpn-manual}, podľa ktorej použitá LZO kompresia môže zväčšiť
+packet o~jeden byte pri nekomprimovateľných údajoch.
 
 V~prípade nulového súboru, ktorý je veľmi dobre komprimovateľný, sme
 očakávali značné zrýchlenie. Z~tabuľky vyplýva, že zrýchlenie bolo celkom
@@ -460,7 +464,9 @@ operácie ako AES.
   \bibitem{proj} \url{https://github.com/laciKE/openvpn_test} -- Repozitár projektu.
   \bibitem{openvpn} \url{http://openvpn.net/index.php/open-source.html} -- Domovská stránka OpenVPN.
   \bibitem{openvpn-static} \url{http://openvpn.net/index.php/open-source/documentation/miscellaneous/78-static-key-mini-howto.html} -- Návod na jednoduché nastavenie statického zdieľaného kľúča pre OpenVPN.
+  \bibitem{openvpn-manual} \url{https://community.openvpn.net/openvpn/wiki/Openvpn22ManPage} -- Manuálové stránky OpenVPN.
   \bibitem{sqlite} \url{http://sqlite.org/} -- Domovská stránka SQLite.
+  \bibitem{sqlite-contrib} \url{http://www.sqlite.org/contrib} -- Domovská stránka rozšírení SQLite.
   \bibitem{rfc-md4-obsolete} \url{http://tools.ietf.org/html/rfc6150} -- RFC 6150: MD4 to Historic Status.
   \bibitem{rfc-hmac-md5} \url{http://tools.ietf.org/html/rfc6151} -- RFC 6151: Updated Security Considerations for the MD5 Message-Digest and the HMAC-MD5 Algorithms.
   \bibitem{blowfish-weak} O. Kara and C. Manap. ``A new class of Weak Keys for Blowfish''. In: \emph{Fast Software Encryption}. 2007, pp. 167--180.

@@ -61,7 +61,6 @@ secret $STATIC_KEY
 			\begin{itemize}
 				\item HMAC autentifikácia paketov: \texttt{auth SHA512}
 				\item šifrovací algoritmus: \texttt{cipher AES-256-CBC}
-				\item veľkosť kľúča: \texttt{keysize n}
 				\item kompresia: \texttt{comp-lzo yes|no}
 			\end{itemize}
 	\end{itemize}
@@ -82,12 +81,12 @@ secret $STATIC_KEY
 		\bigskip
 		\item s OpenVPN:
 			\begin{itemize}
-				\item 40 šifrovacích algoritmov
+				\item 58 šifrovacích algoritmov
 				\item 25 hašovacích funkcií
 				\item kompresia
 				\item aspoň dva druhy súborov (nulový, náhodný)
 				\item obojsmerné posielanie
-				\item $40 \cdot 25 \cdot 2 \cdot 2 \cdot 2 = 8000$ testov!!
+				\item $58 \cdot 25 \cdot 2 \cdot 2 \cdot 2 = 11600$ testov!!
 			\end{itemize}
 		\item to určite nechceme robiť ručne\dots
 	\end{itemize}
@@ -98,7 +97,7 @@ secret $STATIC_KEY
 	\framesubtitle{Inicializácia}
 	\begin{itemize}
 		\item ramdisk, adresáre pre test
-		\item náhodný súbor z \texttt{dev/urandom}, odoslanie klientovi\\
+		\item náhodný súbor z \texttt{/dev/urandom}, odoslanie klientovi\\
 			 nulový súbor z \texttt{/dev/zero}
 		\item generovanie kľúča, odoslanie klientovi
 		\item vytvorenie, sychnronizácia a spoločná podmnožina použiteľných šifier a hašov\\
@@ -118,6 +117,7 @@ secret $STATIC_KEY
 				\item Debian GNU/Linux 7.4, Intel Pentium 4@2.80GHz, 1GB RAM
 				\item OpenVPN 2.2.1
 				\item OpenSSL 1.0.1e-2+deb7u6
+				\item 1Gbps sieť
 			\end{itemize}
 		\item
 {\small
@@ -132,7 +132,7 @@ for COMP in no yes; do
 {\tiny
 \begin{verbatim}
 BEFORE=$(get_time)
-nc $(get_peer_ip) $NC_PORT < $1
+nc -q 0 $(get_peer_ip) $NC_PORT < $1
 AFTER=$(get_time)
 echo "$AFTER - $BEFORE" | bc -l
 \end{verbatim}

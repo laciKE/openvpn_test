@@ -381,6 +381,74 @@ a~Whirlpool sa umiestnil na poslednom mieste.
 
 \section{Záver}
 
+V~tejto práci sme experimentálne odmerali vplyv kompresie, použitej šifry
+a~použitej hašovacej funkcie na priepustnosť OpenVPN tunelov.
+
+V~prípade kompresie sa ukázalo, že v~prípade veľmi dobre komprimovateľných
+dát stúpla rýchlosť približne na jedenapolnásobok. Vzhľadom na to, že
+tieto dáta sa dajú skomprimovať veľmi rýchlo na približne $1/900$, tento
+výsledok nás mierne sklamal. Napriek tomu však isté zlepšenie pre takéto
+dáta kompresia poskytla a~keďže sa ukázalo, že pre nekomprimovateľné dáta
+bolo spomalenie v~dôsledku kompresie zanedbateľné, z~hľadiska
+priepustnosti siete nevidíme dôvod odporúčať nepoužívať kompresiu.
+
+V~prípade šifrovacích algoritmov bol najrýchlejším Blowfish, ktorý je
+v~dnešnej dobe stále považovaný za bezpečný, za predpokladu opatrne
+zvoleného kľúča. Alternatívne šifra Camellia poskytuje porovnateľne dobrý
+výkon bez známych útokov.
+
+Pokiaľ ide o~hašovacie funkcie, najlepšie dopadli MD4 a~MD5, ktoré ale už
+nie sú odporúčané z~hľadiska bezpečnosti. Funkcia SHA1 poskytuje o~niečo
+lepšie záruky s~iba miernym spomalením.
+
+V~tabuľke \ref{tbl:config-chart} zhŕňame celkové poradie jednotlivých
+kombinácií šifry a~hašovacej funkcie spolu s~relatívnym spomalením oproti
+najrýchlejšej kombinácii. Navyše prikladáme pre porovnanie aj rýchlosť
+prenosu mimo VPN tunela, ktorá bola približne osemkrát vyššia, než
+najrýchlejšia kombinácia nastavení.
+
+\begin{table}\centering
+    \caption{Celkové poradie vybratých konfigurácií}
+    \label{tbl:config-chart}
+    \begin{tabular}{|r|l|l|l|}
+        \hline
+            \ & šifra & haš & čas \\ \hline
+            0 & --- & --- & 0.1227 \\ \hline
+            1 & BF-CBC & MD4 & 1.0 \\ \hline
+            2 & BF-CBC & RSA-MD4 & 1.0027 \\ \hline
+            3 & BF-CBC & MD5 & 1.0102 \\ \hline
+            4 & BF-CBC & RSA-MD5 & 1.0114 \\ \hline
+            \dots & \dots & \dots & \dots \\ \hline
+            11 & BF-CBC & SHA1 & 1.0612 \\ \hline
+            \dots & \dots & \dots & \dots \\ \hline
+            41 & CAMELLIA-128-CBC & RIPEMD160 & 1.1087 \\ \hline
+            \dots & \dots & \dots & \dots \\ \hline
+            395 & DES-EDE-CBC & SHA384 & 1.9065 \\ \hline
+            396 & DES-EDE3-CBC & SHA384 & 1.9069 \\ \hline
+            397 & DES-EDE3-CBC & RSA-SHA384 & 1.9082 \\ \hline
+            398 & AES-256-CBC & whirlpool & 1.9115 \\ \hline
+            399 & DES-EDE-CBC & whirlpool & 2.051 \\ \hline
+            400 & DES-EDE3-CBC & whirlpool & 2.053 \\ \hline
+    \end{tabular}
+\end{table}
+
+Predvolené hodnoty v~OpenVPN sú Blowfish ako šifrovací algoritmus a~SHA1
+ako hašovacia funkcia. Tieto nastavenia sa ukázali ako najrýchlejšie
+s~rozumnou zárukou dôvernosti, autentickosti a~integrity so spomalením
+približne 1.06 oproti Blowfish s~MD4. Pre ešte lepšie
+záruky je vhodná kombinácia šifry Camellia a~funkcie RIPEMD160, ktorej
+spomalenie oproti najrýchlejšej kombinácii je približne 1.11.
+
+Existuje viacero smerov, ako ďalej pokračovať v~tejto práci. Jednou
+možnosťou je pre\-skú\-mať vplyv adaptívnej kompresie OpenVPN, ktorá sa snaží
+heuristicky komprimovať iba tie dáta, ktoré sú dobre komprimovateľné,
+a~ostatné prenášať priamo. Ďalšou možnosťou je preskúmať účinok rozšírení
+inštrukčnej sady moderných procesorov o~akceleráciu operácií využívaných
+v~šifre AES; tieto rozšírenia pravdepodobne posunú AES prinajmenšom do
+hornej polovice tabuľky. Je však možné, že zrýchlia aj niektoré iné šifry,
+keďže viacero testovaných šifrovacích algoritmov používa niektoré rovnaké
+operácie ako AES.
+
 \renewcommand{\refname}{Literatúra}
 \phantomsection
 \addcontentsline{toc}{section}{Literatúra}

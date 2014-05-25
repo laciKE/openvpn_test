@@ -225,6 +225,33 @@ v~tejto časti sú dostupné v~projektovom repozitári \cite{proj}.
 
 \subsection{Vplyv kompresie}
 
+Pre určenie vplyvu kompresie na prenosovú rýchlosť sme pre každú trojicu
+šifry, hašovacej funkcie a~súboru spočítali pomer medzi časom bez
+kompresie a~časom s~kompresiou. Pre náhodný aj nulový súbor sme následne
+spravili štatistiku týchto pomerov cez všetky dvojice šifry a~hašovacej
+funkcie. Výsledok je možné vidieť v~tabuľke \ref{tbl:compression}.
+
+\begin{table}\centering
+    \caption{Vplyv kompresie na čas prenosu; čas prenosu bez kompresie: 1}
+    \label{tbl:compression}
+
+    \begin{tabular}{|l||l|l|l|l|l|}
+        \hline
+        \bf súbor & \bf  avg & \bf stdev & \bf median & \bf min & \bf max \\ \hline 
+        random & 1.0027 & 0.002 & 1.0027 & 0.9796 & 1.0075 \\ \hline
+        zero & 0.6614 & 0.0943 & 0.6627 & 0.5164 & 0.84\\ \hline
+    \end{tabular}
+\end{table}
+
+Ako tabuľka naznačuje, pre náhodný súbor, ktorý je veľmi ťažko
+komprimovateľný, použitie kompresie prinieslo iba zanedbateľné zrýchlenie
+vo veľmi obmedzenom počte prípadov; skôr naopak, väčšinou spôsobilo veľmi
+mierne spomalenie.
+
+V~prípade nulového súboru, ktorý je veľmi dobre komprimovateľný, sme
+očakávali značné zrýchlenie. Z~tabuľky vyplýva, že zrýchlenie bolo celkom
+konzistentne o~približne jednu tretinu, s~relatívne malou disperziou.
+
 \subsection{Porovnanie šifrovacích algoritmov}
 
 \subsection{Porovnanie hašovacích funkcií}

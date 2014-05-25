@@ -28,5 +28,7 @@ SELECT digest, ROUND(AVG(relative_duration), 4), ROUND(STDEV(relative_duration),
 
 /* zoradenie dvojic sifra-digest podla relativneho casu */
 .width 16 16 8
+/* relativny cas bez OpenVPN */
+SELECT ROUND(2.85148714925/MIN(duration), 4) FROM cip_dig_tt;
 SELECT cipher, digest, ROUND(duration/(SELECT MIN(duration) FROM cip_dig_tt), 4) FROM cip_dig_tt ORDER BY duration ASC LIMIT 15;
 SELECT cipher, digest, ROUND(duration/(SELECT MIN(duration) FROM cip_dig_tt), 4) FROM cip_dig_tt ORDER BY duration ASC LIMIT 390,10;

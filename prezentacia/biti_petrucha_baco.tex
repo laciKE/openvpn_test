@@ -310,6 +310,7 @@ whirlpool & 1.327 & 0.0589 & 1.3344 & 1.2401 & 1.4065 \\ \hline
 		\item najrýchlejší haš: MD4, MD5 (ale bezpečnosť...)
 		\item vhodný kompromis: SHA1 (5\% pomalšie ako MD4)
 		\item OpenVPN default: BF-CBC, SHA1 :-)
+		\item \small pri použití OpenVPN minimálne $8\times$ pomalší prenos (na danom HW)
 	\end{itemize}
 
 	\begin{columns}
@@ -318,6 +319,7 @@ whirlpool & 1.327 & 0.0589 & 1.3344 & 1.2401 & 1.4065 \\ \hline
 			\begin{tabular}{|r|l|l|l|}
 				\hline
 					\ & šifra & haš & čas \\ \hline
+0 & --- & --- & 0.1227 \\ \hline
 1 & BF-CBC & MD4 & 1.0 \\ \hline
 2 & BF-CBC & RSA-MD4 & 1.0027 \\ \hline
 3 & BF-CBC & MD5 & 1.0102 \\ \hline
@@ -330,6 +332,7 @@ whirlpool & 1.327 & 0.0589 & 1.3344 & 1.2401 & 1.4065 \\ \hline
 				\hline
 					\ & šifra & haš & čas \\ \hline
 \dots & \dots & \dots & \dots \\ \hline
+395 & DES-EDE-CBC & SHA384 & 1.9065 \\ \hline
 396 & DES-EDE3-CBC & SHA384 & 1.9069 \\ \hline
 397 & DES-EDE3-CBC & RSA-SHA384 & 1.9082 \\ \hline
 398 & AES-256-CBC & whirlpool & 1.9115 \\ \hline

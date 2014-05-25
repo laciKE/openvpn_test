@@ -298,6 +298,13 @@ Ako najpomalší algoritmus sa ukázal trojitý DES vo variantoch s~jedným
 a~tromi kľúčmi. AES a~RC2 boli tiež výrazne pomalšie, než Blowfish, zatiaľ
 čo Camellia je iba nepatrne pomalšia oproti Blowfish.
 
+O~algoritme Blowfish je známe, že preň existuje trieda slabých kľúčov,
+ktoré umožňujú kryptoanalýzu \cite{blowfish-weak}, preto treba vytváranie
+kľúča vykonávať opatrne. Nepodarilo sa nám zistiť, nakoľko tento problém
+rieši OpenVPN a~OpenSSL. Pre lepšiu záruku dôvernosti je preto možné
+použiť šifru Camellia, pre ktorú zatiaľ neboli publikované podobné
+zraniteľnosti.
+
 \subsection{Porovnanie hašovacích funkcií}
 
 Pri tomto porovnaní sme opäť vychádzali iba z~časov prenosu náhodného
@@ -384,5 +391,6 @@ a~Whirlpool sa umiestnil na poslednom mieste.
   \bibitem{sqlite} \url{http://sqlite.org/} -- Domovská stránka SQLite.
   \bibitem{rfc-md4-obsolete} \url{http://tools.ietf.org/html/rfc6150} -- RFC 6150: MD4 to Historic Status.
   \bibitem{rfc-hmac-md5} \url{http://tools.ietf.org/html/rfc6151} -- RFC 6151: Updated Security Considerations for the MD5 Message-Digest and the HMAC-MD5 Algorithms.
+  \bibitem{blowfish-weak} O. Kara and C. Manap. ``A new class of Weak Keys for Blowfish''. In: \emph{Fast Software Encryption}. 2007, pp. 167--180.
 \end{thebibliography}
 \end{document}

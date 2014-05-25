@@ -4,6 +4,7 @@
 \usepackage{graphicx}
 \usepackage{ragged2e}
 \usepackage{verbatim}
+\usepackage{hyperref}
 \usetheme{Warsaw}
 
 \title{Experimentálne porovnanie výkonu OpenVPN pri~použití rôznych kryptografických algoritmov}
@@ -306,16 +307,19 @@ whirlpool & 1.327 & 0.0589 & 1.3344 & 1.2401 & 1.4065 \\ \hline
 	\frametitle{Záver}
 	\begin{itemize}
 		\item kompresia zero vs. random
-		\item najrýchlejšia šifra: BF-CBC (AES, 3DES o 30-60\% pomalšie)
+		\item najrýchlejšia šifra: BF-CBC (slabé kľúče)
+		\begin{itemize}
+			\item vhodný kompromis: CAMELLIA-128-CBC
+		\end{itemize}
 		\item najrýchlejší haš: MD4, MD5 (ale bezpečnosť...)
-		\item vhodný kompromis: SHA1 (5\% pomalšie ako MD4)
-		\item OpenVPN default: BF-CBC, SHA1 :-)
-		\item \small pri použití OpenVPN minimálne $8\times$ pomalší prenos (na danom HW)
+		\begin{itemize}
+			\item vhodný kompromis: SHA1, RIPEMD160
+		\end{itemize}
 	\end{itemize}
 
 	\begin{columns}
 		\tiny
-		\column[t]{0.4\textwidth}
+		\column[t]{0.55\textwidth}
 			\begin{tabular}{|r|l|l|l|}
 				\hline
 					\ & šifra & haš & čas \\ \hline
@@ -326,12 +330,16 @@ whirlpool & 1.327 & 0.0589 & 1.3344 & 1.2401 & 1.4065 \\ \hline
 4 & BF-CBC & RSA-MD5 & 1.0114 \\ \hline
 \dots & \dots & \dots & \dots \\ \hline
 11 & BF-CBC & SHA1 & 1.0612 \\ \hline
+\dots & \dots & \dots & \dots \\ \hline
+41 & CAMELLIA-128-CBC & RIPEMD160 & 1.1087 \\ \hline
 			\end{tabular}
 		\column[t]{0.5\textwidth}
 			\begin{tabular}{|r|l|l|l|}
 				\hline
 					\ & šifra & haš & čas \\ \hline
 \dots & \dots & \dots & \dots \\ \hline
+393 & DES-EDE3-CBC & RSA-SHA512 & 1.9048 \\ \hline
+394 & DES-EDE-CBC & RSA-SHA384 & 1.9062 \\ \hline
 395 & DES-EDE-CBC & SHA384 & 1.9065 \\ \hline
 396 & DES-EDE3-CBC & SHA384 & 1.9069 \\ \hline
 397 & DES-EDE3-CBC & RSA-SHA384 & 1.9082 \\ \hline
@@ -341,15 +349,19 @@ whirlpool & 1.327 & 0.0589 & 1.3344 & 1.2401 & 1.4065 \\ \hline
 			\end{tabular}
 	\end{columns}
 
-	\bigskip
-	\small
-	Odkazy:
-	\footnotesize
 	\begin{itemize}
-		\item \href{https://github.com/laciKE/openvpn\_test/}{https://github.com/laciKE/openvpn\_test/}
-		\item \href{https://openvpn.net/index.php/open-source/documentation/miscellaneous/78-static-key-mini-howto.html}{https://openvpn.net/index.php/open-source/documentation/miscellaneous/78-static-key-mini-howto.html}
-	\end{itemize}
+		\item OpenVPN default: BF-CBC, SHA1 :-)
+		\item ďalšia odporúčaná kombinácia: CAMELLIA-128-CBC, RIPEMD160
+		\item \small pri použití OpenVPN minimálne $8\times$ pomalší prenos (na danom HW)
+	\end{itemize}	
 \end{frame}
 
+\begin{frame}
+	\frametitle{Záver}
+	Repozitár s projektom:
+	\begin{itemize}
+		\item \url{https://github.com/laciKE/openvpn\_test/}
+	\end{itemize}
+\end{frame}
 
 \end{document}

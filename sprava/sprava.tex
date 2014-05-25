@@ -80,10 +80,10 @@ language=python
 
 \section{Úvod}
 
-OpenVPN je populárny multiplatformový nástroj na vytváranie virtuálnych
-privátnych sietí. Na zaručenie dôvernosti a~integrity dát tečúcich cez
-takúto sieť sú použité kryptografické prostriedky, ktoré vyžadujú
-netriviálne výpočty.
+OpenVPN \cite{openvpn} je populárny multiplatformový open-source nástroj
+na vytváranie virtuálnych privátnych sietí. Na zaručenie dôvernosti
+a~integrity dát tečúcich cez takúto sieť sú použité kryptografické
+prostriedky, ktoré vyžadujú netriviálne výpočty.
 
 Cieľom tejto práce je experimentálne určiť vplyv použitých nastavení
 OpenVPN na priepustnosť vytvorenej siete. Konkrétne ide o~použitý
@@ -108,7 +108,7 @@ vytvárania certifikátov, ale je obmedzená na práve dvoch účastníkov, na
 rozdiel od PKI, kedy môže jeden server obsluhovať koľkokoľvek klientov.
 
 Keďže v~tejto práci využívame iba dvoch účastníkov, pre jednoduchosť sme
-zvolili statický zdieľaný kľúč.
+zvolili statický zdieľaný kľúč podľa \cite{openvpn-static}.
 
 Merali sme vplyv troch parametrov na priepustnosť: šifrovací algoritmus,
 hašovacia funkcia a~použitie kompresie. Pre každú kombináciu týchto
@@ -214,6 +214,10 @@ sekúnd po poslednom prenose.
 
 \section{Výsledky}
 
+Výsledky sme spracúvali s~pomocou databázy SQLite \cite{sqlite}. Namerané
+dáta spolu s~SQL dotazmi použitými na vypočítanie štatistík popísaných
+v~tejto časti sú dostupné v~projektovom repozitári \cite{proj}.
+
 \subsection{Vplyv kompresie}
 
 \subsection{Porovnanie šifrovacích algoritmov}
@@ -222,10 +226,13 @@ sekúnd po poslednom prenose.
 
 \section{Záver}
 
-%\renewcommand{\refname}{Literatúra}
-%\phantomsection
-%\addcontentsline{toc}{section}{Literatúra}
-%\begin{thebibliography}{99}
-%  \bibitem{proj} \url{https://github.com/laciKE/openvpn_test} - Repozitár projektu.
-%\end{thebibliography}
+\renewcommand{\refname}{Literatúra}
+\phantomsection
+\addcontentsline{toc}{section}{Literatúra}
+\begin{thebibliography}{99}
+  \bibitem{proj} \url{https://github.com/laciKE/openvpn_test} -- Repozitár projektu.
+  \bibitem{openvpn} \url{http://openvpn.net/index.php/open-source.html} -- Domovská stránka OpenVPN.
+  \bibitem{openvpn-static} \url{http://openvpn.net/index.php/open-source/documentation/miscellaneous/78-static-key-mini-howto.html} -- Návod na jednoduché nastavenie statického zdieľaného kľúča pre OpenVPN.
+  \bibitem{sqlite} \url{http://sqlite.org/} -- Domovská stránka SQLite.
+\end{thebibliography}
 \end{document}
